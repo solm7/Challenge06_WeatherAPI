@@ -11,11 +11,16 @@ function getProperDate(date) {
     return properDate[0];
 }
 
-function makeElements(date, temp, wind, hum, uvi, section) {
+function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
     var mydiv = document.createElement("div");
     var mydate = document.createElement("p");
     mydate.textContent = date;
     mydiv.appendChild(mydate)
+
+    var theIcon = document.createElement("img")
+    theIcon.setAttribute("src", "http://openweathermap.org/img/wn/" + img + "@2x.png")
+    theIcon.setAttribute("alt", desc)
+    mydiv.appendChild(theIcon)
 
     var theTemp = document.createElement("p")
     theTemp.textContent = "Temp: " + temp
@@ -56,15 +61,17 @@ function apiGrab() {
             return response.json();
         })
         .then(function (data) {
-            // console.log(data)
+            console.log(data)
             var weatherInfo = {
                 mydate: data.daily[0].dt,
                 temp: data.daily[0].temp.day,
                 windSpeed: data.daily[0].wind_speed,
                 humidity: data.daily[0].humidity,
-                uvIndex: data.daily[0].uvi
+                uvIndex: data.daily[0].uvi,
+                icon: data.daily[0].weather[0].icon,
+                desc: data.daily[0].weather[0].description
             }
-            makeElements(getProperDate(weatherInfo.mydate), weatherInfo.temp, weatherInfo.windSpeed, weatherInfo.humidity, weatherInfo.uvIndex, currentWeather)
+            makeElements(getProperDate(weatherInfo.mydate), weatherInfo.temp, weatherInfo.windSpeed, weatherInfo.humidity, weatherInfo.uvIndex, weatherInfo.icon, weatherInfo.desc, currentWeather)
         })
 }
 
