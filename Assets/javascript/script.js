@@ -40,10 +40,21 @@ function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
     theHum.textContent = "Humidity: " + hum
     mydiv.appendChild(theHum)
 
-    var theUvi = document.createElement("p")
-    theUvi.textContent = "UV Index: " + uvi
-    mydiv.appendChild(theUvi)
+    // var theUvi = document.createElement("p")
+    // theUvi.textContent = "UV Index: " + uvi
 
+
+    var myUVContainer = document.createElement("div");
+    var myUVFillerText = document.createElement("p");
+    var myIndexContainer = document.createElement("div")
+    var myUVIndex = document.createElement("p");
+
+    myUVFillerText.textContent = "UV Index: "
+    myUVIndex.textContent = uvi;
+    myIndexContainer.appendChild(myUVIndex);
+    myUVContainer.appendChild(myUVFillerText);
+    myUVContainer.appendChild(myIndexContainer);
+    mydiv.appendChild(myUVContainer)
 
     section.appendChild(mydiv)
 }
