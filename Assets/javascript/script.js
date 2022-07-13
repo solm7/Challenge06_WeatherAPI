@@ -11,6 +11,12 @@ function getProperDate(date) {
     return properDate[0];
 }
 
+function insertCityName(city, place) {
+    var mycity = document.createElement("p")
+    mycity.textContent = city
+    place.appendChild(mycity)
+}
+
 function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
     var mydiv = document.createElement("div");
     var mydate = document.createElement("p");
@@ -48,10 +54,12 @@ function apiGrab() {
             return response.json();
         })
         .then(function (data) {
+            console.log(data)
             var coordinates = {
                 lat: data[0].lat,
                 lon: data[0].lon
             }
+            insertCityName(data[0].name, currentWeather)
             return coordinates;
         })
         .then(function (coords) {
