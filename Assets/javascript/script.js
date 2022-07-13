@@ -2,6 +2,7 @@
 var weatherButton = document.querySelector("#search-button");
 var city = document.querySelector("#city")
 var currentWeather = document.querySelector("#current-weather")
+var fiveDay = document.querySelector("#five-day")
 
 function getProperDate(date) {
     var tempTime = date * 1000;
@@ -19,6 +20,7 @@ function insertCityName(city, place) {
 
 function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
     var mydiv = document.createElement("div");
+    mydiv.setAttribute("id", "weatherData")
     var mydate = document.createElement("p");
     mydate.textContent = date;
     mydiv.appendChild(mydate)
@@ -40,22 +42,19 @@ function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
     theHum.textContent = "Humidity: " + hum
     mydiv.appendChild(theHum)
 
-    // var theUvi = document.createElement("p")
-    // theUvi.textContent = "UV Index: " + uvi
+    if (uvi !== null) {
+        var myUVContainer = document.createElement("div");
+        var myUVFillerText = document.createElement("p");
+        var myIndexContainer = document.createElement("div")
+        var myUVIndex = document.createElement("p");
 
-
-    var myUVContainer = document.createElement("div");
-    var myUVFillerText = document.createElement("p");
-    var myIndexContainer = document.createElement("div")
-    var myUVIndex = document.createElement("p");
-
-    myUVFillerText.textContent = "UV Index: "
-    myUVIndex.textContent = uvi;
-    myIndexContainer.appendChild(myUVIndex);
-    myUVContainer.appendChild(myUVFillerText);
-    myUVContainer.appendChild(myIndexContainer);
-    mydiv.appendChild(myUVContainer)
-
+        myUVFillerText.textContent = "UV Index: "
+        myUVIndex.textContent = uvi;
+        myIndexContainer.appendChild(myUVIndex);
+        myUVContainer.appendChild(myUVFillerText);
+        myUVContainer.appendChild(myIndexContainer);
+        mydiv.appendChild(myUVContainer)
+    }
     section.appendChild(mydiv)
 }
 
@@ -91,6 +90,15 @@ function apiGrab() {
                 desc: data.daily[0].weather[0].description
             }
             makeElements(getProperDate(weatherInfo.mydate), weatherInfo.temp, weatherInfo.windSpeed, weatherInfo.humidity, weatherInfo.uvIndex, weatherInfo.icon, weatherInfo.desc, currentWeather)
+            for (var i = 1; i < 6; i++) {
+                var nextDate = getProperDate(data.daily[i].dt)
+                var nextTemp = data.daily[i].temp.day
+                var nextWind = data.daily[i].wind_speed
+                var nextHum = data.daily[i].humidity
+                var nextIcon = data.daily[i].weather[0].icon
+                var nextDesc = data.daily[i].weather[0].description
+                makeElements(nextDate, nextTemp, nextWind, nextHum, null, nextIcon, nextDesc, fiveDay)
+            }
         })
 }
 
