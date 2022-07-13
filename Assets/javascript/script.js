@@ -18,6 +18,25 @@ function insertCityName(city, place) {
     place.appendChild(mycity)
 }
 
+function uvNotification(uvi, uvColor) {
+    if (uvi >= 0.0 && uvi < 3.0) {
+        uvColor.style.backgroundColor = 'green';
+        uvColor.style.color = 'white';
+    } else if (uvi >= 3.0 && uvi < 6.0) {
+        uvColor.style.backgroundColor = 'yellow';
+        uvColor.style.color = 'black';
+    } else if (uvi >= 6.0 && uvi < 8.0) {
+        uvColor.style.backgroundColor = 'orange';
+        uvColor.style.color = 'black';
+    } else if (uvi >= 8.0 && uvi < 11.0) {
+        uvColor.style.backgroundColor = 'red';
+        uvColor.style.color = 'white';
+    } else {
+        uvColor.style.backgroundColor = 'purple';
+        uvColor.style.color = 'white';
+    }
+}
+
 function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
     var mydiv = document.createElement("div");
     mydiv.setAttribute("id", "weatherData")
@@ -46,11 +65,12 @@ function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
         var myUVContainer = document.createElement("div");
         var myUVFillerText = document.createElement("p");
         var myIndexContainer = document.createElement("div")
+        myIndexContainer.setAttribute("id", "indexcolor")
         var myUVIndex = document.createElement("p");
-
         myUVFillerText.textContent = "UV Index: "
         myUVIndex.textContent = uvi;
         myIndexContainer.appendChild(myUVIndex);
+        uvNotification(uvi, myIndexContainer)
         myUVContainer.appendChild(myUVFillerText);
         myUVContainer.appendChild(myIndexContainer);
         mydiv.appendChild(myUVContainer)
