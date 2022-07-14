@@ -3,6 +3,7 @@ var weatherButton = document.querySelector("#search-button");
 var city = document.querySelector("#city")
 var currentWeather = document.querySelector("#current-weather")
 var fiveDay = document.querySelector("#five-day")
+var recentCities = document.querySelector("#recent-searches")
 
 function getProperDate(date) {
     var tempTime = date * 1000;
@@ -10,6 +11,69 @@ function getProperDate(date) {
     var converterdDate = dateObject.toLocaleString("en-US", { timeZoneName: "short" });
     var properDate = converterdDate.split(",");
     return properDate[0];
+}
+
+function resetContainers() {
+    var numCities = recentCities.children.length;
+    for (var i = 0; i < numCities; i++) {
+        recentCities.children[0].remove();
+    }
+    var numWeather = currentWeather.children.length;
+    for (var i = 0; i < numWeather; i++) {
+        currentWeather.children[0].remove();
+    }
+    var numDay = fiveDay.children.length;
+    for (var i = 0; i < numDay; i++) {
+        fiveDay.children[0].remove();
+    }
+}
+
+function isLocalStorage() {
+    if (localStorage.getItem("myRecentSearches") !== null) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function addbuttons(city, container) {
+    var myButton = document.createElement("button")
+    myButton.textContent = city;
+    myButton.setAttribute("class", "recent")
+    container.appendChild(myButton)
+}
+
+function showSearchResults(container) {
+    var myLocalStorage = JSON.parse(localStorage.getItem("myRecentSearches"))
+    for (var i = 0; i < myLocalStorage.length; i++) {
+        addbuttons(myLocalStorage[i], container)
+    }
+}
+
+function storedSearches(city, element) {
+    var tempArray = []
+    if (isLocalStorage()) {
+        var suitcase = JSON.parse(localStorage.getItem("myRecentSearches"))
+        if (suitcase.includes(city)) {
+            showSearchResults(element);
+            return;
+        }
+        for (var i = 0; i < suitcase.length; i++) {
+            tempArray.push(suitcase[i]);
+        }
+        tempArray.push(city)
+        if (tempArray.length > 7) {
+            tempArray.shift();
+        }
+
+        localStorage.setItem("myRecentSearches", JSON.stringify(tempArray));
+        showSearchResults(element)
+        return
+    }
+    //if local storage doesnt exist 
+    tempArray.push(city);
+    addbuttons(tempArray[0], element)
+    localStorage.setItem("myRecentSearches", JSON.stringify(tempArray));
 }
 
 function insertCityName(city, place) {
@@ -79,6 +143,7 @@ function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
 }
 
 function apiGrab() {
+    resetContainers();
     fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city.value + "&limit=5&appid=053a26026344ad16c7761daa0c147b49", {})
         .then(function (response) {
             return response.json();
@@ -90,6 +155,7 @@ function apiGrab() {
                 lon: data[0].lon
             }
             insertCityName(data[0].name, currentWeather)
+            storedSearches(data[0].name, recentCities)
             return coordinates;
         })
         .then(function (coords) {
@@ -120,6 +186,21 @@ function apiGrab() {
                 makeElements(nextDate, nextTemp, nextWind, nextHum, null, nextIcon, nextDesc, fiveDay)
             }
         })
+}
+
+//Event Delegate for Recent Cities section
+recentCities.onclick = function (event) {
+    var buttonClick = event.target
+
+    if (buttonClick.classList.contains("recent")) {
+        city.value = buttonClick.textContent;
+        city.setAttribute("placeholder", buttonClick.textContent)
+        apiGrab();
+    }
+}
+
+if (isLocalStorage()) {
+    showSearchResults(recentCities)
 }
 
 weatherButton.addEventListener("click", apiGrab)
