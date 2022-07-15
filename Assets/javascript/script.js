@@ -109,7 +109,7 @@ function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
     mydiv.appendChild(mydate)
 
     var theIcon = document.createElement("img")
-    theIcon.setAttribute("src", "http://openweathermap.org/img/wn/" + img + "@2x.png")
+    theIcon.setAttribute("src", "https://openweathermap.org/img/wn/" + img + "@2x.png")
     theIcon.setAttribute("alt", desc)
     mydiv.appendChild(theIcon)
 
@@ -144,12 +144,11 @@ function makeElements(date, temp, wind, hum, uvi, img, desc, section) {
 
 function apiGrab() {
     resetContainers();
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city.value + "&limit=5&appid=053a26026344ad16c7761daa0c147b49", {})
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city.value + "&limit=5&appid=053a26026344ad16c7761daa0c147b49", {})
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data)
             var coordinates = {
                 lat: data[0].lat,
                 lon: data[0].lon

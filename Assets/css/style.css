@@ -1,0 +1,70 @@
+HTML {
+    background-color: darkcyan;
+}
+
+h1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+    background-color: #13293d;
+    color: #fff;
+}
+
+.recent {
+    color: aliceblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: navy
+}
+
+#search-button {
+    display: flex;
+    justify-content: center;
+    padding: 2%;
+    background-color: goldenrod;
+    color: #fff;
+}
+
+#search-container {
+    display: inline-flex;
+    justify-content: center;
+}
+
+input {
+    display: flex;
+    justify-content: center;
+    padding: 2%;
+    background-color: #13293d;
+    color: #fff;
+}
+
+#recent-searches {
+    display: flex;
+    justify-content: flex-start;
+    color: #fff;
+}
+
+h2 {
+    margin: 2% 0;
+    font-size: 180%;
+}
+
+#five-day {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+    background-color: #13293d;
+    color: #fff;
+}
+
+#weatherdata {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1%;
+    background-color: #13293d;
+    color: #fff;
+}
